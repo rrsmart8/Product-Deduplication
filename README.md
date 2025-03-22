@@ -6,6 +6,7 @@
 
 This project aims to deduplicate a product dataset by identifying and merging duplicate entries based on certain key attributes. We leverage DBSCAN clustering to identify duplicate records, and then merge them based on specific fields (e.g., product descriptions).
 
+
 ### Outcome:
 
 After applying the deduplication process, we achieved the following results:
@@ -27,6 +28,27 @@ The process is split into several steps:
 - **Sentence-Transformers**: For generating text embeddings to help with clustering.
 
 ## Steps
+
+## 0. Thought Process
+
+Before implementing the product deduplication process, I spent time analyzing the dataset to identify key fields that could be used to distinguish unique products and potential duplicates.
+
+### 0.1 Dataset Exploration
+
+I explored various fields such as `product_name`, `product_title`, `brand`, `price`, `description`, and `intended_industries`. These fields stood out as the most important for identifying duplicates, as they contain key product details.
+
+### 0.2 Identifying Key Differentiators
+
+I focused on a few key fields to differentiate products:
+- **`product_name`** and **`product_title`**: These are primary identifiers for the product, so I focused on them for comparison.
+- **`industry_simplified`**: The original `intended_industries` field contained multiple values, so I chose to simplify it by selecting only one industry for comparison and clustering. (made a new column in my pandas dataframe)
+- **`brand`**: Helps differentiate products with similar names but from different manufacturers.
+- **`description`**: Provides more detailed information to clarify duplicates when names and titles are similar.
+
+### 0.3 Merging Duplicates
+
+For merging duplicates, I considered keeping the first non-null value for `product_name` and `product_title`. For fields like `brand` and `description`, I merged them by joining unique, non-null values. The goal was to consolidate all relevant information into a single entry while maintaining uniqueness. 
+
 
 ### 1. Initial Filtering of Duplicates
 
